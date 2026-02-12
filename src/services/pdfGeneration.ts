@@ -178,7 +178,7 @@ export const generateInvoicePDF = async (data: InvoiceData): Promise<{ blob: Blo
   doc.setFontSize(8);
   doc.setFont(FONT_STYLE, 'bold');
   doc.setTextColor(139, 0, 0); // Dark red/maroon color like company name
-  doc.text('AVAILABLE IN ALL TYPES OF TOURIST CAB OPERATORS', 105, 48, { align: 'center' });
+  doc.text('Tag Line', 105, 48, { align: 'center' });
   doc.setTextColor(0, 0, 0); // Reset to black
 
   // Divider Line

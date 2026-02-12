@@ -106,7 +106,7 @@ export default function InvoiceList() {
 
           {/* Availability message */}
           <p className="text-xs font-semibold text-center mt-3 text-slate-800">
-            AVAILABLE IN ALL TYPES OF A/C - NON A/C TOURIST VEHICLES
+            Tag Line
           </p>
 
           {/* Divider Line */}
