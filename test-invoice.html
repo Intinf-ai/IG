@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Invoice Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .info {
+            background: #f0f0f0;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Invoice Test Generator</h1>
+    <div class="info">
+        <h3>Test Data:</h3>
+        <ul>
+            <li>Vehicle Rent: 15 hrs @ Rs 475/hr</li>
+            <li>KM Charges: 300 km @ Rs 18/km</li>
+            <li>Driver Beta: 2 days @ Rs 400/day (NEW)</li>
+            <li>Night Halt: 1 day @ Rs 300/day (NEW)</li>
+            <li>Toll: Rs 500, Parking: Rs 200</li>
+            <li>GST: 5% (Regular - splits into CGST/SGST)</li>
+            <li>Discount: Rs 1,000</li>
+            <li>Advance: Rs 2,000</li>
+        </ul>
+    </div>
+    <button onclick="generateTestInvoice()">Generate Test Invoice PDF</button>
+    
+    <script type="module">
+        import { generateInvoicePDF } from './src/services/pdfGeneration.ts';
+
+        window.generateTestInvoice = async function() {
+            const testData = {
+                customerTitle: 'Mr.',
+                customerName: 'Test Customer',
+                customerCompanyName: 'Test Company Ltd',
+                customerAddress: 'No 123, Test Street, Chennai, Tamil Nadu - 600001',
+                customerGstNo: '33ABCDE1234F1Z5',
+                driverName: 'John Driver',
+                vehicleNo: 'TN 01 AB 1234',
+                vehicleType: 'SUV',
+                tripStartLocation: 'Chennai',
+                tripEndLocation: 'Ooty',
+                startKm: 1000,
+                endKm: 1350,
+                startTime: '2026-02-03T10:00:00',
+                endTime: '2026-02-04T18:00:00',
+                rentType: 'hour',
+                fixedAmount: 0,
+                hours: 15,
+                ratePerHour: 475,
+                days: 0,
+                ratePerDay: 0,
+                totalKm: 350,
+                freeKm: 50,
+                chargeableKm: 300,
+                ratePerKm: 0,
+                chargePerKmFixed: 0,
+                chargePerKmHour: 18,
+                fuelChargePerKm: 0,
+                additionalCosts: [
+                    { label: 'Toll', amount: 500 },
+                    { label: 'Parking', amount: 200 }
+                ],
+                enableDriverBeta: true,
+                driverBetaDays: 2,
+                driverBetaAmountPerDay: 400,
+                enableNightHalt: true,
+                nightHaltDays: 1,
+                nightHaltAmountPerDay: 300,
+                enableDiscount: true,
+                discountAmount: 1000,
+                enableGst: true,
+                gstPercentage: 5,
+                gstAmount: 631.25, // 5% of (7125 + 5400)
+                enableIgst: false,
+                igstPercentage: 5,
+                igstAmount: 0,
+                advance: 2000,
+                grandTotal: 0
+            };
+
+            try {
+                console.log('Generating test invoice...');
+                const { blob, fileName } = await generateInvoicePDF(testData);
+                
+                // Download the PDF
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                alert('✅ Test invoice generated successfully!');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Error generating invoice: ' + error.message);
+            }
+        };
+    </script>
+</body>
+</html>
